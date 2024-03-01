@@ -252,6 +252,8 @@ void tm1637_set_segment_number(tm1637_led_t * led, const uint8_t segment_idx, co
     tm1637_set_segment_fixed(led, segment_idx, seg_data);
 }
 
+// Fix address mope
+// [Set data][Set address][Display data][Control display]
 void tm1637_set_segment_fixed(tm1637_led_t * led, const uint8_t segment_idx, const uint8_t data)
 {
     tm1637_start(led);
@@ -266,6 +268,8 @@ void tm1637_set_segment_fixed(tm1637_led_t * led, const uint8_t segment_idx, con
     tm1637_stop(led);
 }
 
+// Automatic address adding mode
+// [Set data][Set address][Display data1][Display data2][Display data3][Display data4][Control display]
 void tm1637_set_segment_auto(tm1637_led_t * led, const uint8_t *data, const int data_length)
 {
     tm1637_start(led);
