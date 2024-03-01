@@ -34,7 +34,7 @@ idf.py flash
 # Configuration   
 
 ![config-top](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/587b7ae6-0acd-4395-9672-5330b1b46a47)
-![config-app](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/e338da80-66ee-423e-86f9-12bd109ce75a)
+![config-app](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/db480fbd-8e0d-4cb2-9197-c9933ac04338)
 
 
 # Wirering
