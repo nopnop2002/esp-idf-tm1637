@@ -1,0 +1,36 @@
+menu "TM1637 Configuration"
+
+	config GPIO_RANGE_MAX
+		int
+		default 39 if IDF_TARGET_ESP32
+		default 46 if IDF_TARGET_ESP32S2
+		default 48 if IDF_TARGET_ESP32S3
+		default 18 if IDF_TARGET_ESP32C2
+		default 19 if IDF_TARGET_ESP32C3
+		default 30 if IDF_TARGET_ESP32C6
+
+	config TM1637_CLK_PIN
+		int "TM1637 lcd CLK pin GPIO number"
+		range 0 GPIO_RANGE_MAX
+		default 22 if IDF_TARGET_ESP32
+		default 12 if IDF_TARGET_ESP32S2
+		default 12 if IDF_TARGET_ESP32S3
+		default  6 # C3 and others
+		help
+			GPIO number (IOxx) for CLK pin of TM1637 display.
+			Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
+			GPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.
+
+	config TM1637_DIO_PIN
+		int "TM1637 lcd DIO pin GPIO number"
+		range 0 GPIO_RANGE_MAX
+		default 21 if IDF_TARGET_ESP32
+		default 11 if IDF_TARGET_ESP32S2
+		default 11 if IDF_TARGET_ESP32S3
+		default  5 # C3 and others
+		help
+			GPIO number (IOxx) for DIO pin of TM1637 display.
+			Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
+			GPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.
+
+endmenu
