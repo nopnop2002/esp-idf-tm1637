@@ -35,3 +35,15 @@ idf.py flash
 
 ![config-top](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/587b7ae6-0acd-4395-9672-5330b1b46a47)
 ![config-app](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/e338da80-66ee-423e-86f9-12bd109ce75a)
+
+
+# Wirering
+
+|TM1637||ESP32|ESP32-S2/S3|ESP32-C2/C3/C6||
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|CLK|--|GPIO22|GPIO12|GPIO6|(*1)|
+|DIO|--|GPIO21|GPIO11|GPIO5|(*1)|
+|GND|--|GND|GND|GND||
+|VCC|--|3.3V|3.3V|3.3V||
+
+(*1)You can change it to any pin using menuconfig.   
