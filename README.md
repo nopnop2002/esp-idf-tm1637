@@ -19,10 +19,10 @@ ESP-IDF V5.1 is required when using ESP32C6.
 
 # Hardware requiments
 TM1637 8 segment 0.36INCH Digital Display Tube 4 digit LED module.   
-There are two types of display patterns.   
-- Pattern 1   
+There are several products with different segments.   
+- Product 1   
  8 segments with dots + 8 segments with dots + 8 segments with dots + 8 segments with dots   
-- Pattern 2   
+- Product 2   
  7 segments + 8 segments with colon + 7 segments + 7 segments   
 
 ![TM1637-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/59e95bf5-01bb-4c4a-9f96-4d36869be2e5)
