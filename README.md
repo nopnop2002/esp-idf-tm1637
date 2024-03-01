@@ -1,5 +1,5 @@
 # esp-idf-tm1637
-TM1637 Driver for esp-idf.
+TM1637 Driver for esp-idf.   
 I based it on [this](https://github.com/petrows/esp-32-tm1637).   
 
 ![tm1637-ip](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/15cb623d-2298-4344-a9c7-f573cb0255cd)
