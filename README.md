@@ -51,4 +51,6 @@ idf.py flash
 |GND|--|GND|GND|GND||
 |VCC|--|3.3V|3.3V|3.3V||
 
-(*1)You can change it to any pin using menuconfig.   
+(*1)   
+The TM1637's interface is similar to I2C, but it is not I2C.   
+You can change it to any pin using menuconfig.   
