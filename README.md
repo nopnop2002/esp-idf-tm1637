@@ -11,7 +11,8 @@ I based it on [this](https://github.com/petrows/esp-32-tm1637).
 - Added display of ascii characters.   
 - Added text scroll display function.   
 - Added text animation display function.   
-- Supported negative integer display and negative real numbers.   
+- Supported negative integer number display.   
+- Supported negative real numbers display.   
 
 # Software requirements
 ESP-IDF V4.4/V5.x.   
