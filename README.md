@@ -30,6 +30,7 @@ There are several products with different segments and different sizes.
 
 - 0.56 Inchi Product   
  7 segments + 8 segments with colon + 7 segments + 7 segments   
+ The dots do not light up   
 ![0 56-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/54afb3f0-c6dc-46a4-9b77-6809cd70e2e8)
 
 # Installation
