@@ -37,6 +37,10 @@ static const int8_t numerical_symbols[] = {
     0x00, // 0b00000000     // space
 };
 
+#define ZERO  0
+#define MINUS 10
+#define SPACE 11
+
 static const int8_t ascii_symbols[] = {
     //NUL   SOH   STX   ETX   EOT   ENQ   ACK   BEL   BS    HT    LF    VT
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,

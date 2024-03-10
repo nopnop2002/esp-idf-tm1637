@@ -185,21 +185,6 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, int tim
 	}
 }
 
-void tm1637_set_segment_number(tm1637_led_t * led, const uint8_t segment_idx, const uint8_t num, const bool dot)
-{
-	uint8_t seg_data = 0x00;
-
-	if (num < (sizeof(numerical_symbols)/sizeof(numerical_symbols[0]))) {
-		seg_data = numerical_symbols[num]; // Select proper segment image
-	}
-
-	if (dot) {
-		seg_data |= 0x80; // Set DOT segment flag
-	}
-
-	tm1637_set_segment_fixed(led, segment_idx, seg_data);
-}
-
 // Fix address mode
 // Display on specific addresses
 // [Set data][Set address][Display data][Control display]
@@ -236,102 +221,79 @@ void tm1637_set_segment_auto(tm1637_led_t * led, const uint8_t *data, const int 
 	tm1637_stop(led);
 }
 
-void tm1637_set_number(tm1637_led_t * led, uint16_t number)
+void tm1637_set_segment_number(tm1637_led_t * led, const uint8_t segment_idx, const uint8_t num, const bool dot)
 {
-	tm1637_set_number_lead_dot(led, number, false, 0x00);
+	uint8_t seg_data = 0x00;
+
+	if (num < (sizeof(numerical_symbols)/sizeof(numerical_symbols[0]))) {
+		seg_data = numerical_symbols[num]; // Select proper segment image
+	}
+
+	if (dot) {
+		seg_data |= 0x80; // Set DOT segment flag
+	}
+
+	tm1637_set_segment_fixed(led, segment_idx, seg_data);
 }
 
-void tm1637_set_number_lead(tm1637_led_t * led, uint16_t number, const bool lead_zero)
+void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const uint8_t dot_mask)
 {
-	tm1637_set_number_lead_dot(led, number, lead_zero, 0x00);
-}
+	int16_t _number = abs(number);
 
-void tm1637_set_number_lead_dot(tm1637_led_t * led, uint16_t number, bool lead_zero, const uint8_t dot_mask)
-{
-	uint8_t lead_number = lead_zero ? 0xFF : numerical_symbols[0];
-
-	if (number < 10) {
-		tm1637_set_segment_number(led, 3, number, dot_mask & 0x01);
-		tm1637_set_segment_number(led, 2, lead_number, dot_mask & 0x02);
-		tm1637_set_segment_number(led, 1, lead_number, dot_mask & 0x04);
-		tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
-	} else if (number < 100) {
-		tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
-		tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
-		tm1637_set_segment_number(led, 1, lead_number, dot_mask & 0x04);
-		tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
-	} else if (number < 1000) {
-		tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
-		tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
-		tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_mask & 0x04);
-		tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+	if (number >= 0) {
+		uint8_t lead_number = SPACE;
+		if (lead_zero) lead_number = ZERO;
+		if (_number < 10) {
+			tm1637_set_segment_number(led, 3, number, dot_mask & 0x01);
+			tm1637_set_segment_number(led, 2, lead_number, dot_mask & 0x02);
+			tm1637_set_segment_number(led, 1, lead_number, dot_mask & 0x04);
+			tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+		} else if (_number < 100) {
+			tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
+			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
+			tm1637_set_segment_number(led, 1, lead_number, dot_mask & 0x04);
+			tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+		} else if (_number < 1000) {
+			tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
+			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
+			tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_mask & 0x04);
+			tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+		} else {
+			tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
+			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
+			tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_mask & 0x04);
+			tm1637_set_segment_number(led, 0, (number / 1000) % 10, dot_mask & 0x08);
+		}
 	} else {
-		tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
-		tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
-		tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_mask & 0x04);
-		tm1637_set_segment_number(led, 0, (number / 1000) % 10, dot_mask & 0x08);
-	}
-}
-
-void tm1637_set_float(tm1637_led_t * led, float n) {
-	if( n < 0 ) {
-		tm1637_set_segment_number(led, 0, MINUS_SIGN_IDX, 0);
-		float absn = nearestf(fabs(n),1);
-		int int_part = (int)absn;
-		float fx_part = absn - int_part;
-		if( absn < 10 ) {
-			fx_part *= 100;
-			tm1637_set_segment_number(led, 1, (int)(absn + 0.5), 1 );
-			tm1637_set_segment_number(led, 2, ((int)fx_part/10) % 10, 0 );
-			tm1637_set_segment_number(led, 3, ((int)fx_part) % 10, 0 );
-		}
-		else if( n < 100 ) {
-			fx_part *= 100;
-			uint8_t f = ((int)fx_part % 10);
-			
-			tm1637_set_segment_number(led, 1, (int_part/10) % 10, 0 );
-			tm1637_set_segment_number(led, 2, int_part % 10, 1 );
-			tm1637_set_segment_number(led, 3, ((int)fx_part/10) % 10 + ((f > 4)?1:0), 0 );
-		}
-		else if( n < 1000 ) {
-			tm1637_set_segment_number(led, 1, (int_part/100) % 10, 0 );
-			tm1637_set_segment_number(led, 2, (int_part/10) % 10, 0 );
-			tm1637_set_segment_number(led, 3, (int_part % 10) + ((fx_part >= 0.5 )?1:0), 0 );
-		}
-	}
-	else {
-		//	positive number
-		int int_part = (int)n;
-		float fx_part = n - int_part;
-		if( n < 10 ) {
-			n = nearestf(n,1);
-			int_part = (int)n;
-			fx_part = 10000 * (n - int_part);
-			
-			tm1637_set_segment_number(led, 0, int_part, 1);
-			tm1637_set_segment_number(led, 1, ((int)fx_part/1000) % 10, 0 );
-			tm1637_set_segment_number(led, 2, ((int)fx_part/100) % 10, 0 );
-			tm1637_set_segment_number(led, 3, ((int)fx_part/10) % 10, 0 );
-		}
-		else if( n < 100 ) {
-			n = nearestf(n,2);
-			int_part = (int)n;
-			fx_part = 1000 * (n - int_part);
-			
-			tm1637_set_segment_number(led, 0, (int_part/10) % 10, 0);
-			tm1637_set_segment_number(led, 1, int_part % 10, 1 );
-			tm1637_set_segment_number(led, 2, ((int)fx_part/100) % 10, 0 );
-			tm1637_set_segment_number(led, 3, ((int)fx_part/10) % 10,0);
-		}
-		else if( n < 1000 ) {
-			n = nearestf(n,2);
-			int_part = (int)n;
-			fx_part = 100 * (n - int_part);
-			
-			tm1637_set_segment_number(led, 0, (int_part/100) % 10, 0);
-			tm1637_set_segment_number(led, 1, (int_part/10) % 10, 0 );
-			tm1637_set_segment_number(led, 2, int_part % 10, 1 );
-			tm1637_set_segment_number(led, 3, ((int)fx_part/10) % 10, 0 );
+		if (_number < 10) {
+			if (lead_zero) {
+				tm1637_set_segment_number(led, 3, _number, dot_mask & 0x01);
+				tm1637_set_segment_number(led, 2, ZERO, dot_mask & 0x02);
+				tm1637_set_segment_number(led, 1, ZERO, dot_mask & 0x04);
+				tm1637_set_segment_number(led, 0, MINUS, dot_mask & 0x08);
+			} else {
+				tm1637_set_segment_number(led, 3, _number, dot_mask & 0x01);
+				tm1637_set_segment_number(led, 2, MINUS, dot_mask & 0x02);
+				tm1637_set_segment_number(led, 1, SPACE, dot_mask & 0x04);
+				tm1637_set_segment_number(led, 0, SPACE, dot_mask & 0x08);
+			}
+		} else if (_number < 100) {
+			if (lead_zero) {
+				tm1637_set_segment_number(led, 3, _number % 10, dot_mask & 0x01);
+				tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_mask & 0x02);
+				tm1637_set_segment_number(led, 1, ZERO, dot_mask & 0x04);
+				tm1637_set_segment_number(led, 0, MINUS, dot_mask & 0x08);
+			} else {
+				tm1637_set_segment_number(led, 3, _number % 10, dot_mask & 0x01);
+				tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_mask & 0x02);
+				tm1637_set_segment_number(led, 1, MINUS, dot_mask & 0x04);
+				tm1637_set_segment_number(led, 0, SPACE, dot_mask & 0x08);
+			}
+		} else {
+			tm1637_set_segment_number(led, 3, _number % 10, dot_mask & 0x01);
+			tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_mask & 0x02);
+			tm1637_set_segment_number(led, 1, (_number / 100) % 10, dot_mask & 0x04);
+			tm1637_set_segment_number(led, 0, MINUS, dot_mask & 0x08);
 		}
 	}
 }
