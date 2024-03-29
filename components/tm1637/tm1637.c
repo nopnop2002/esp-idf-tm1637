@@ -143,7 +143,7 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 	}
 }
 
-void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, int time)
+void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const uint8_t dot_position, int time)
 {
 	char _text[5];
 	int _text_length = strlen(text);
@@ -160,6 +160,7 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, int tim
 		tm1637_set_segment_fixed(led, segment_idx, 0);
 	}
 
+	uint8_t dot_mask = 0x01;
 	for (int segment_idx=3; segment_idx>=0; segment_idx--) {
 		int c = text[segment_idx];
 		uint8_t seg_data = ascii_symbols[c];
@@ -168,6 +169,10 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, int tim
 		tm1637_set_segment_fixed(led, segment_idx, seg_data);
 		ets_delay_us(TM1637_AUTO_DELAY);
 		seg_data = ascii_symbols[c];
+		//printf("seg_data=0x%x dot_position=0x%x dot_mask=0x%x\n", seg_data, dot_position, dot_mask);
+		if (dot_position & dot_mask) seg_data |= 0x80; // Set DOT segment flag
+		//printf("seg_data=0x%x\n", seg_data);
+		dot_mask = dot_mask << 1;
 		tm1637_set_segment_fixed(led, segment_idx, seg_data);
 		ets_delay_us(TM1637_AUTO_DELAY);
 	}
@@ -236,7 +241,7 @@ void tm1637_set_segment_number(tm1637_led_t * led, const uint8_t segment_idx, co
 	tm1637_set_segment_fixed(led, segment_idx, seg_data);
 }
 
-void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const uint8_t dot_mask)
+void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const uint8_t dot_position)
 {
 	int16_t _number = abs(number);
 
@@ -244,56 +249,56 @@ void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const
 		uint8_t lead_number = SPACE;
 		if (lead_zero) lead_number = ZERO;
 		if (_number < 10) {
-			tm1637_set_segment_number(led, 3, number, dot_mask & 0x01);
-			tm1637_set_segment_number(led, 2, lead_number, dot_mask & 0x02);
-			tm1637_set_segment_number(led, 1, lead_number, dot_mask & 0x04);
-			tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+			tm1637_set_segment_number(led, 3, number, dot_position & 0x01);
+			tm1637_set_segment_number(led, 2, lead_number, dot_position & 0x02);
+			tm1637_set_segment_number(led, 1, lead_number, dot_position & 0x04);
+			tm1637_set_segment_number(led, 0, lead_number, dot_position & 0x08);
 		} else if (_number < 100) {
-			tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
-			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
-			tm1637_set_segment_number(led, 1, lead_number, dot_mask & 0x04);
-			tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+			tm1637_set_segment_number(led, 3, number % 10, dot_position & 0x01);
+			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_position & 0x02);
+			tm1637_set_segment_number(led, 1, lead_number, dot_position & 0x04);
+			tm1637_set_segment_number(led, 0, lead_number, dot_position & 0x08);
 		} else if (_number < 1000) {
-			tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
-			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
-			tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_mask & 0x04);
-			tm1637_set_segment_number(led, 0, lead_number, dot_mask & 0x08);
+			tm1637_set_segment_number(led, 3, number % 10, dot_position & 0x01);
+			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_position & 0x02);
+			tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_position & 0x04);
+			tm1637_set_segment_number(led, 0, lead_number, dot_position & 0x08);
 		} else {
-			tm1637_set_segment_number(led, 3, number % 10, dot_mask & 0x01);
-			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_mask & 0x02);
-			tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_mask & 0x04);
-			tm1637_set_segment_number(led, 0, (number / 1000) % 10, dot_mask & 0x08);
+			tm1637_set_segment_number(led, 3, number % 10, dot_position & 0x01);
+			tm1637_set_segment_number(led, 2, (number / 10) % 10, dot_position & 0x02);
+			tm1637_set_segment_number(led, 1, (number / 100) % 10, dot_position & 0x04);
+			tm1637_set_segment_number(led, 0, (number / 1000) % 10, dot_position & 0x08);
 		}
 	} else {
 		if (_number < 10) {
 			if (lead_zero) {
-				tm1637_set_segment_number(led, 3, _number, dot_mask & 0x01);
-				tm1637_set_segment_number(led, 2, ZERO, dot_mask & 0x02);
-				tm1637_set_segment_number(led, 1, ZERO, dot_mask & 0x04);
-				tm1637_set_segment_number(led, 0, MINUS, dot_mask & 0x08);
+				tm1637_set_segment_number(led, 3, _number, dot_position & 0x01);
+				tm1637_set_segment_number(led, 2, ZERO, dot_position & 0x02);
+				tm1637_set_segment_number(led, 1, ZERO, dot_position & 0x04);
+				tm1637_set_segment_number(led, 0, MINUS, dot_position & 0x08);
 			} else {
-				tm1637_set_segment_number(led, 3, _number, dot_mask & 0x01);
-				tm1637_set_segment_number(led, 2, MINUS, dot_mask & 0x02);
-				tm1637_set_segment_number(led, 1, SPACE, dot_mask & 0x04);
-				tm1637_set_segment_number(led, 0, SPACE, dot_mask & 0x08);
+				tm1637_set_segment_number(led, 3, _number, dot_position & 0x01);
+				tm1637_set_segment_number(led, 2, MINUS, dot_position & 0x02);
+				tm1637_set_segment_number(led, 1, SPACE, dot_position & 0x04);
+				tm1637_set_segment_number(led, 0, SPACE, dot_position & 0x08);
 			}
 		} else if (_number < 100) {
 			if (lead_zero) {
-				tm1637_set_segment_number(led, 3, _number % 10, dot_mask & 0x01);
-				tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_mask & 0x02);
-				tm1637_set_segment_number(led, 1, ZERO, dot_mask & 0x04);
-				tm1637_set_segment_number(led, 0, MINUS, dot_mask & 0x08);
+				tm1637_set_segment_number(led, 3, _number % 10, dot_position & 0x01);
+				tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_position & 0x02);
+				tm1637_set_segment_number(led, 1, ZERO, dot_position & 0x04);
+				tm1637_set_segment_number(led, 0, MINUS, dot_position & 0x08);
 			} else {
-				tm1637_set_segment_number(led, 3, _number % 10, dot_mask & 0x01);
-				tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_mask & 0x02);
-				tm1637_set_segment_number(led, 1, MINUS, dot_mask & 0x04);
-				tm1637_set_segment_number(led, 0, SPACE, dot_mask & 0x08);
+				tm1637_set_segment_number(led, 3, _number % 10, dot_position & 0x01);
+				tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_position & 0x02);
+				tm1637_set_segment_number(led, 1, MINUS, dot_position & 0x04);
+				tm1637_set_segment_number(led, 0, SPACE, dot_position & 0x08);
 			}
 		} else {
-			tm1637_set_segment_number(led, 3, _number % 10, dot_mask & 0x01);
-			tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_mask & 0x02);
-			tm1637_set_segment_number(led, 1, (_number / 100) % 10, dot_mask & 0x04);
-			tm1637_set_segment_number(led, 0, MINUS, dot_mask & 0x08);
+			tm1637_set_segment_number(led, 3, _number % 10, dot_position & 0x01);
+			tm1637_set_segment_number(led, 2, (_number / 10) % 10, dot_position & 0x02);
+			tm1637_set_segment_number(led, 1, (_number / 100) % 10, dot_position & 0x04);
+			tm1637_set_segment_number(led, 0, MINUS, dot_position & 0x08);
 		}
 	}
 }

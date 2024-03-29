@@ -24,12 +24,10 @@ TM1637 8 segment Digital Display Tube 4 digit LED module.
 There are several products with different segments and different sizes.   
 - 0.36 Inch Product   
  8 segments with dots + 8 segments with dots + 8 segments with dots + 8 segments with dots.   
-![product-1-0 36](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/4d3e4ba0-5248-4e45-8dd1-c1a80ba501f8)
 
-- 0.36 Inch Product   
  7 segments + 8 segments with colon + 7 segments + 7 segments.   
  Real numbers cannot be displayed.   
-![product-2-0 36](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/ac397e9c-815d-479f-a4a0-2676cca3218b)
+![0 36inchi](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/856f23ed-d198-4f68-b2a1-f085d59c0e11)
 
 - 0.56 Inchi Product   
  7 segments + 8 segments with colon + 7 segments + 7 segments.   
@@ -48,8 +46,8 @@ idf.py flash
 # Configuration   
 
 ![config-top](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/587b7ae6-0acd-4395-9672-5330b1b46a47)
-![config-app](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/db480fbd-8e0d-4cb2-9197-c9933ac04338)
-
+![config-app-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/c69674d1-5617-4b38-af79-77a0f58125ae)
+![config-app-2](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/18db8c24-46b9-42db-af71-14ba09fff7a4)
 
 # Wirering
 

@@ -41,4 +41,19 @@ menu "TM1637 Configuration"
 			This option sets the init brightness level of the TM1637 LED module.
 			The value should be between 0 (lowest brightness) and 7 (highest brightness).
 			The default brightness value is 7 (highest brightness).
+
+	choice TM1637_SEGMENT_TYPE
+		prompt "Segment Type"
+		default TM1637_DOT_SEGMENT
+		help
+			Select Interface.
+		config TM1637_DOT_SEGMENT
+			bool "8 Segment with dot"
+			help
+				8 Segment with dot.
+		config TM1637_CLOCK_SEGMENT
+			bool "Clock Segment"
+			help
+				Clock Segment.
+	endchoice
 endmenu

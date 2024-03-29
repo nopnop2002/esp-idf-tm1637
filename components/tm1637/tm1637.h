@@ -56,9 +56,10 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char *text);
  * @brief Set ascii string
  * @param led LED object
  * @param text ascii string
+ * @param dot_position dot position
  * @param time display time[ms]
  */
-void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, int time);
+void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const uint8_t dot_position, int time);
 
 /**
  * @brief Set one-segment with Fix addressr mode
@@ -90,9 +91,9 @@ void tm1637_set_segment_number(tm1637_led_t * led, const uint8_t segment_idx, co
  * @param led LED object
  * @param number Display number (-999...9999)
  * @param lead_zero Leading Zero or Leading Space
- * @param dot_mask dot position
+ * @param dot_position dot position
  */
-void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const uint8_t dot_mask);
+void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const uint8_t dot_position);
 
 
 #ifdef __cplusplus

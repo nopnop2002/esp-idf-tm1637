@@ -21,7 +21,7 @@
 const gpio_num_t LED_CLK = CONFIG_TM1637_CLK_PIN;
 const gpio_num_t LED_DTA = CONFIG_TM1637_DIO_PIN;
 
-void lcd_tm1637_task(void * arg)
+void tm1637_task(void * arg)
 {
 	tm1637_led_t * lcd = tm1637_init(LED_CLK, LED_DTA);
 
@@ -79,6 +79,7 @@ void lcd_tm1637_task(void * arg)
 		tm1637_set_number(lcd, -123, true, 0x00); // -123
 		vTaskDelay(100);
 
+#if CONFIG_TM1637_DOT_SEGMENT
 		// Test display floating number
 		tm1637_set_number(lcd, 1, true, 0x08); // 0.001
 		vTaskDelay(100);
@@ -100,6 +101,7 @@ void lcd_tm1637_task(void * arg)
 		vTaskDelay(100);
 		tm1637_set_number(lcd, -123, true, 0x08); // -.123
 		vTaskDelay(100);
+#endif
 
 		// Test display text
 		tm1637_set_segment_ascii(lcd, "PLAY");
@@ -110,26 +112,18 @@ void lcd_tm1637_task(void * arg)
 		vTaskDelay(100);
 		tm1637_set_segment_ascii(lcd, "STOP");
 		vTaskDelay(100);
-		tm1637_set_segment_ascii_with_time(lcd, "1234", 1000);
-		vTaskDelay(100);
-
-#if 0
-		// Test display numbers
-		for (int x=0; x<10; ++x) {
-			bool show_dot = x%2; // Show dot every 2nd cycle
-			tm1637_set_segment_number(lcd, 0, x, show_dot);
-			tm1637_set_segment_number(lcd, 1, x, show_dot); // On my display "dot" (clock symbol ":") connected only here
-			tm1637_set_segment_number(lcd, 2, x, show_dot);
-			tm1637_set_segment_number(lcd, 3, x, show_dot);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-		}
-		vTaskDelay(100);
+#if CONFIG_TM1637_CLOCK_SEGMENT
+		uint8_t dot_position = 0x04; // Light up the dots in the second segment
+#else
+		uint8_t dot_position = 0x00;
 #endif
+		tm1637_set_segment_ascii_with_time(lcd, "1234", dot_position, 1000);
+		vTaskDelay(100);
 	} // end while
 }
 
 void app_main()
 {
-	xTaskCreate(&lcd_tm1637_task, "lcd_tm1637_task", 4096, NULL, 5, NULL);
+	xTaskCreate(&tm1637_task, "tm1637_task", 1024*4, NULL, 5, NULL);
 }
 
