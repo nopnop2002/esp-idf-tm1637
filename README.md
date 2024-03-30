@@ -13,6 +13,7 @@ I based it on [this](https://github.com/petrows/esp-32-tm1637).
 - Added text animation display function.   
 - Supported negative integer number display.   
 - Supported negative real numbers display.   
+- Supported 6 segments module.   
 
 # Software requirements
 ESP-IDF V4.4/V5.x.   
