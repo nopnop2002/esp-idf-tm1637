@@ -51,7 +51,7 @@ idf.py flash
 Select Segments type   
 ![config-app-2](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/6a5b0c7c-32bd-4ede-b5ba-ff8bf9fba590)
 
-Select number of Segments
+Select number of Segments   
 ![config-app-3](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/f67fc28f-4b7d-4431-a61a-f9f41b453800)
 
 # Wirering
