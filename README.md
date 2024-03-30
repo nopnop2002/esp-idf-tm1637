@@ -49,7 +49,7 @@ idf.py flash
 
 ![config-app-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/da9fad9b-f510-4a02-84a5-af44d588aa97)
 
-Select Segments type   
+Select Segment type   
 ![config-app-2](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/6a5b0c7c-32bd-4ede-b5ba-ff8bf9fba590)
 
 Select number of Segments   
