@@ -24,9 +24,7 @@ TM1637 8 segment Digital Display Tube 4 digit LED module.
 There are several products with different segments and different sizes.   
 - 0.36 Inch Product   
  8 segments with dots + 8 segments with dots + 8 segments with dots + 8 segments with dots.   
-
- 7 segments + 8 segments with colon + 7 segments + 7 segments.   
- Real numbers cannot be displayed.   
+ 7 segments + 8 segments with colon + 7 segments + 7 segments. Real numbers cannot be displayed.   
 ![0 36inchi](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/856f23ed-d198-4f68-b2a1-f085d59c0e11)
 
 - 0.56 Inchi Product   
