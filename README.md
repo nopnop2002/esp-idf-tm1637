@@ -22,12 +22,16 @@ ESP-IDF V5.1 is required when using ESP32C6.
 # Hardware requiments
 TM1637 8 segment Digital Display Tube 4 digit LED module.   
 There are several products with different segments and different sizes.   
-- 0.36 Inch Product   
+- 0.36 Inch 4 Segments Product   
  8 segments with dots. Real numbers can be displayed.   
  Clock segments. Real numbers cannot be displayed.   
 ![0 36inchi](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/856f23ed-d198-4f68-b2a1-f085d59c0e11)
 
-- 0.56 Inchi Product   
+- 0.36 Inch 6 Segments Product   
+ 8 segments with dots. Real numbers can be displayed.   
+![0 36inch-6segment](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/b3bf7b07-1f64-44ac-9ee7-a5fd159bb657)
+
+- 0.56 Inchi 4 Segments Product   
  Clock segments. Real numbers cannot be displayed.   
  The dots do not light up   
 ![0 56-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/54afb3f0-c6dc-46a4-9b77-6809cd70e2e8)
@@ -42,9 +46,13 @@ idf.py flash
 
 # Configuration   
 
-![config-top](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/587b7ae6-0acd-4395-9672-5330b1b46a47)
-![config-app-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/c69674d1-5617-4b38-af79-77a0f58125ae)
-![config-app-2](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/18db8c24-46b9-42db-af71-14ba09fff7a4)
+![config-app-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/da9fad9b-f510-4a02-84a5-af44d588aa97)
+
+Select Segments type   
+![config-app-2](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/6a5b0c7c-32bd-4ede-b5ba-ff8bf9fba590)
+
+Select number of Segments
+![config-app-3](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/f67fc28f-4b7d-4431-a61a-f9f41b453800)
 
 # Wirering
 

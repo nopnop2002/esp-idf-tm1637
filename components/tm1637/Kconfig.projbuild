@@ -56,4 +56,20 @@ menu "TM1637 Configuration"
 			help
 				Clock Segment.
 	endchoice
+
+	choice TM1637_SEGMENT_NUMBER
+		prompt "Number of segments"
+		default TM1637_4_SEGMENT
+		help
+			Select Interface.
+		config TM1637_4_SEGMENT
+			bool "4 Segments"
+			help
+				4 Segments.
+		config TM1637_6_SEGMENT
+			bool "6 Segments"
+			help
+				6 Segments.
+	endchoice
+
 endmenu

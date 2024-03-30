@@ -24,6 +24,8 @@ extern "C" {
 struct tm;
 
 typedef struct {
+	int segment_idx[6];
+	int segment_max;
 	gpio_num_t m_pin_clk;
 	gpio_num_t m_pin_dta;
 	uint8_t m_brightness;
@@ -59,7 +61,7 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char *text);
  * @param dot_position dot position
  * @param time display time[ms]
  */
-void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const uint8_t dot_position, int time);
+void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const uint16_t dot_position, int time);
 
 /**
  * @brief Set one-segment with Fix addressr mode
@@ -67,7 +69,7 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
  * @param segment_idx Segment index (0..3)
  * @param data Raw data, bitmask is XGFEDCBA
  */
-void tm1637_set_segment_fixed(tm1637_led_t * led, const uint8_t segment_idx, const uint8_t data);
+void tm1637_set_segment_fixed(tm1637_led_t * led, const int8_t segment_idx, const uint8_t data);
 
 /**
  * @brief Set segments with Automatic address adding mode
@@ -84,16 +86,16 @@ void tm1637_set_segment_auto(tm1637_led_t * led, const uint8_t *data, const int 
  * @param num Number to set (0x00..0x0F, 0xFF for clear)
  * @param dot Display dot of this segment
  */
-void tm1637_set_segment_number(tm1637_led_t * led, const uint8_t segment_idx, const uint8_t num, const bool dot);
+void tm1637_set_segment_number(tm1637_led_t * led, const int8_t segment_idx, const uint8_t num, const bool dot);
 
 /**
  * @brief Set full display number, in decimal encoding
  * @param led LED object
- * @param number Display number (-999...9999)
+ * @param number Display number (-99999...999999)
  * @param lead_zero Leading Zero or Leading Space
  * @param dot_position dot position
  */
-void tm1637_set_number(tm1637_led_t * led, int16_t number, bool lead_zero, const uint8_t dot_position);
+void tm1637_set_number(tm1637_led_t * led, int32_t number, bool lead_zero, const uint16_t dot_position);
 
 
 #ifdef __cplusplus
