@@ -28,9 +28,11 @@ static void tm1637_delay();
 
 #if CONFIG_TM1637_4_SEGMENT
 int segment_idx[6] = {-1, -1, 0, 1, 2, 3};
+int segment_start = 2;
 int segment_max = 4;
 #else
 int segment_idx[6] = {2, 1, 0, 5, 4, 3};
+int segment_start = 0;
 int segment_max = 6;
 #endif
 
@@ -99,6 +101,7 @@ tm1637_led_t * tm1637_init(gpio_num_t pin_clk, gpio_num_t pin_data) {
 	for (int i=0;i<sizeof(segment_idx);i++) {
 		led->segment_idx[i] = segment_idx[i];
 	}
+	led->segment_start = segment_start;
 	led->segment_max = segment_max;
 	led->m_pin_clk = pin_clk;
 	led->m_pin_dta = pin_data;
@@ -135,7 +138,7 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 			int c = _text[i];
 			uint8_t seg_data = ascii_symbols[c];
 			//printf("text[%d]=%d seg_data=0x%x\n", i, c, seg_data);
-			tm1637_set_segment_fixed(led, led->segment_idx[i], seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
 		}
 	} else {
 		// show sliding segment
@@ -156,6 +159,7 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 				segments4[2] = segments4[3];
 				segments4[3] = 0;
 				tm1637_set_segment_auto(led, segments4, 4);
+				ets_delay_us(TM1637_AUTO_DELAY);
 			}
 		} else {
 			uint8_t segments6[6] = {0,0,0,0,0,0};
@@ -178,6 +182,7 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 				segments6[4] = segments6[3];
 				segments6[3] = 0;
 				tm1637_set_segment_auto(led, segments6, 6);
+				ets_delay_us(TM1637_AUTO_DELAY);
 			}
 		}
 	}
@@ -196,7 +201,7 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
 		memcpy(_text, text, 4);
 	}
 
-	for (int i=0; i<led->segment_max; i++) {
+	for (int i=led->segment_start; i<6; i++) {
 		tm1637_set_segment_fixed(led, led->segment_idx[i], 0);
 	}
 
@@ -206,14 +211,14 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
 		uint8_t seg_data = ascii_symbols[c];
 		// Find the lower half segment(segment=c/d/e/g)
 		seg_data = seg_data & 0x5c; // 0b0101-1100
-		tm1637_set_segment_fixed(led, led->segment_idx[i], seg_data);
+		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
 		ets_delay_us(TM1637_AUTO_DELAY);
 		seg_data = ascii_symbols[c];
 		//printf("seg_data=0x%x dot_position=0x%x dot_mask=0x%x\n", seg_data, dot_position, dot_mask);
 		if (dot_position & dot_mask) seg_data |= 0x80; // Set DOT segment flag
 		//printf("seg_data=0x%x\n", seg_data);
 		dot_mask = dot_mask << 1;
-		tm1637_set_segment_fixed(led, led->segment_idx[i], seg_data);
+		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
 		ets_delay_us(TM1637_AUTO_DELAY);
 	}
 
@@ -223,9 +228,9 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
 		uint8_t seg_data = ascii_symbols[c];
 		// Find the upper half segment(segment=a/b/f/g)
 		seg_data = seg_data & 0x63; // 0b0110-0011
-		tm1637_set_segment_fixed(led, led->segment_idx[i], seg_data);
+		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
 		ets_delay_us(TM1637_AUTO_DELAY);
-		tm1637_set_segment_fixed(led, led->segment_idx[i], 0);
+		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], 0);
 		ets_delay_us(TM1637_AUTO_DELAY);
 	}
 }

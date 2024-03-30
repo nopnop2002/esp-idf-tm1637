@@ -25,6 +25,7 @@ struct tm;
 
 typedef struct {
 	int segment_idx[6];
+	int segment_start;
 	int segment_max;
 	gpio_num_t m_pin_clk;
 	gpio_num_t m_pin_dta;
