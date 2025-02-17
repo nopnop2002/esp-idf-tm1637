@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include <esp32/rom/ets_sys.h>
+#include <rom/ets_sys.h>
 
 #include "tm1637.h"
 #include "symbols.h"
