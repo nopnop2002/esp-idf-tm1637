@@ -24,16 +24,14 @@ ESP-IDF V5.1 is required when using ESP32C6.
 TM1637 8 segment Digital Display Tube 4 digit LED module.   
 There are several products with different segments and different sizes.   
 - 0.36 Inch 4 Segments Product   
- 8 segments with dots. Real numbers can be displayed.   
- Clock segments. Real numbers cannot be displayed.   
+ There are dot segment modules and clock segment modules.   
+ The clock segment module cannot display real numbers.   
 ![0 36inchi](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/856f23ed-d198-4f68-b2a1-f085d59c0e11)
 
 - 0.36 Inch 6 Segments Product   
- 8 segments with dots. Real numbers can be displayed.   
 ![0 36inch-6segment](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/b3bf7b07-1f64-44ac-9ee7-a5fd159bb657)
 
 - 0.56 Inchi 4 Segments Product   
- Clock segments. Real numbers cannot be displayed.   
  The dots do not light up   
 ![0 56-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/54afb3f0-c6dc-46a4-9b77-6809cd70e2e8)
 
