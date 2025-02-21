@@ -32,7 +32,7 @@ There are several products with different segments and different sizes.
 ![0 36inch-6segment](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/b3bf7b07-1f64-44ac-9ee7-a5fd159bb657)
 
 - 0.56 Inchi 4 Segments Product   
- The dots do not light up   
+ The dots on the clock segment module do not light up.   
 ![0 56-1](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/54afb3f0-c6dc-46a4-9b77-6809cd70e2e8)
 
 # Installation
