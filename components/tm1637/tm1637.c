@@ -13,6 +13,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "freertos/FreeRTOS.h"
 #include "rom/ets_sys.h"
 #include "esp_log.h"
 #include "driver/gpio.h"
@@ -223,14 +224,16 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
 		// Find the lower half segment(segment=c/d/e/g)
 		seg_data = seg_data & 0x5c; // 0b0101-1100
 		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
-		ets_delay_us(TM1637_AUTO_DELAY);
+		//ets_delay_us(TM1637_AUTO_DELAY);
+		vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 		seg_data = ascii_symbols[c];
 		//printf("seg_data=0x%x dot_position=0x%x dot_mask=0x%x\n", seg_data, dot_position, dot_mask);
 		if (dot_position & dot_mask) seg_data |= 0x80; // Set DOT segment flag
 		//printf("seg_data=0x%x\n", seg_data);
 		dot_mask = dot_mask << 1;
 		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
-		ets_delay_us(TM1637_AUTO_DELAY);
+		//ets_delay_us(TM1637_AUTO_DELAY);
+		vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 	}
 
 	ets_delay_us(time*1000);
@@ -240,9 +243,11 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
 		// Find the upper half segment(segment=a/b/f/g)
 		seg_data = seg_data & 0x63; // 0b0110-0011
 		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], seg_data);
-		ets_delay_us(TM1637_AUTO_DELAY);
+		//ets_delay_us(TM1637_AUTO_DELAY);
+		vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 		tm1637_set_segment_fixed(led, led->segment_idx[i+led->segment_start], 0);
-		ets_delay_us(TM1637_AUTO_DELAY);
+		//ets_delay_us(TM1637_AUTO_DELAY);
+		vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 	}
 }
 
