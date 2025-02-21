@@ -163,7 +163,8 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 				int c = text[i];
 				segments4[3] = ascii_symbols[c];
 				tm1637_set_segment_auto(led, segments4, 4);
-				ets_delay_us(TM1637_AUTO_DELAY);
+				//ets_delay_us(TM1637_AUTO_DELAY);
+				vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 			}
 			for (int i=0;i<4;i++) {
 				segments4[0] = segments4[1];
@@ -171,7 +172,8 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 				segments4[2] = segments4[3];
 				segments4[3] = 0;
 				tm1637_set_segment_auto(led, segments4, 4);
-				ets_delay_us(TM1637_AUTO_DELAY);
+				//ets_delay_us(TM1637_AUTO_DELAY);
+				vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 			}
 		} else {
 			uint8_t segments6[6] = {0,0,0,0,0,0};
@@ -184,7 +186,8 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 				int c = text[i];
 				segments6[3] = ascii_symbols[c];
 				tm1637_set_segment_auto(led, segments6, 6);
-				ets_delay_us(TM1637_AUTO_DELAY);
+				//ets_delay_us(TM1637_AUTO_DELAY);
+				vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 			}
 			for (int i=0;i<6;i++) {
 				segments6[2] = segments6[1];
@@ -194,7 +197,8 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 				segments6[4] = segments6[3];
 				segments6[3] = 0;
 				tm1637_set_segment_auto(led, segments6, 6);
-				ets_delay_us(TM1637_AUTO_DELAY);
+				//ets_delay_us(TM1637_AUTO_DELAY);
+				vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 			}
 		}
 	}
