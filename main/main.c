@@ -23,17 +23,18 @@ const gpio_num_t LED_DTA = CONFIG_TM1637_DIO_PIN;
 
 void tm1637_task(void * arg)
 {
-	tm1637_led_t * lcd = tm1637_init(LED_CLK, LED_DTA);
+	tm1637_led_t * led = tm1637_init(LED_CLK, LED_DTA);
+	if (led == NULL) vTaskDelete(NULL);
 
 #if 0
-	tm1637_set_brightness(lcd, 7);
+	tm1637_set_brightness(led, 7);
 	while (true) {
-		tm1637_set_segment_fixed(lcd, lcd->segment_idx[0], 0xFF);
-		tm1637_set_segment_fixed(lcd, lcd->segment_idx[1], 0xFF);
-		tm1637_set_segment_fixed(lcd, lcd->segment_idx[2], 0xFF);
-		tm1637_set_segment_fixed(lcd, lcd->segment_idx[3], 0xFF);
-		tm1637_set_segment_fixed(lcd, lcd->segment_idx[4], 0xFF);
-		tm1637_set_segment_fixed(lcd, lcd->segment_idx[5], 0xFF);
+		tm1637_set_segment_fixed(led, led->segment_idx[0], 0xFF);
+		tm1637_set_segment_fixed(led, led->segment_idx[1], 0xFF);
+		tm1637_set_segment_fixed(led, led->segment_idx[2], 0xFF);
+		tm1637_set_segment_fixed(led, led->segment_idx[3], 0xFF);
+		tm1637_set_segment_fixed(led, led->segment_idx[4], 0xFF);
+		tm1637_set_segment_fixed(led, led->segment_idx[5], 0xFF);
 		vTaskDelay(100);
 	}
 #endif
@@ -44,82 +45,82 @@ void tm1637_task(void * arg)
 		for (uint8_t x=0; x<32; ++x)
 		{
 			uint8_t v_seg_data = seg_data[x%6];
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[0], v_seg_data);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[1], v_seg_data);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[2], v_seg_data);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[3], v_seg_data);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[4], v_seg_data);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[5], v_seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[0], v_seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[1], v_seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[2], v_seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[3], v_seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[4], v_seg_data);
+			tm1637_set_segment_fixed(led, led->segment_idx[5], v_seg_data);
 			vTaskDelay(10);
 		}
 
 		// Test brightness
 		for (int x=0; x<7; x++) {
-			tm1637_set_brightness(lcd, x);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[0], 0xFF);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[1], 0xFF);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[2], 0xFF);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[3], 0xFF);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[4], 0xFF);
-			tm1637_set_segment_fixed(lcd, lcd->segment_idx[5], 0xFF);
+			tm1637_set_brightness(led, x);
+			tm1637_set_segment_fixed(led, led->segment_idx[0], 0xFF);
+			tm1637_set_segment_fixed(led, led->segment_idx[1], 0xFF);
+			tm1637_set_segment_fixed(led, led->segment_idx[2], 0xFF);
+			tm1637_set_segment_fixed(led, led->segment_idx[3], 0xFF);
+			tm1637_set_segment_fixed(led, led->segment_idx[4], 0xFF);
+			tm1637_set_segment_fixed(led, led->segment_idx[5], 0xFF);
 			vTaskDelay(30);
 		}
 		vTaskDelay(100);
 
 		// Test display integer number
-		tm1637_set_number(lcd, 1, true, 0x00); // 0001
+		tm1637_set_number(led, 1, true, 0x00); // 0001
 		vTaskDelay(100);
-		tm1637_set_number(lcd, 12, true, 0x00); // 0012
+		tm1637_set_number(led, 12, true, 0x00); // 0012
 		vTaskDelay(100);
-		tm1637_set_number(lcd, 123, true, 0x00); // 0123
+		tm1637_set_number(led, 123, true, 0x00); // 0123
 		vTaskDelay(100);
-		tm1637_set_number(lcd, 1234, true, 0x00); // 1234
+		tm1637_set_number(led, 1234, true, 0x00); // 1234
 		vTaskDelay(100);
-		if (lcd->segment_max == 6) {
-			tm1637_set_number(lcd, 12345, true, 0x00); // 12345
+		if (led->segment_max == 6) {
+			tm1637_set_number(led, 12345, true, 0x00); // 12345
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, true, 0x00); // 123456
-			vTaskDelay(100);
-		}
-
-		tm1637_set_number(lcd, 1, false, 0x00); // ____1
-		vTaskDelay(100);
-		tm1637_set_number(lcd, 12, false, 0x00); // ____12
-		vTaskDelay(100);
-		tm1637_set_number(lcd, 123, false, 0x00); // ___123
-		vTaskDelay(100);
-		tm1637_set_number(lcd, 1234, false, 0x00); // __1234
-		vTaskDelay(100);
-		if (lcd->segment_max == 6) {
-			tm1637_set_number(lcd, 12345, false, 0x00); // _12345
-			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, false, 0x00); // 123456
+			tm1637_set_number(led, 123456, true, 0x00); // 123456
 			vTaskDelay(100);
 		}
 
-		tm1637_set_number(lcd, -1, true, 0x00); // -001
+		tm1637_set_number(led, 1, false, 0x00); // ____1
 		vTaskDelay(100);
-		tm1637_set_number(lcd, -12, true, 0x00); // -012
+		tm1637_set_number(led, 12, false, 0x00); // ____12
 		vTaskDelay(100);
-		tm1637_set_number(lcd, -123, true, 0x00); // -123
+		tm1637_set_number(led, 123, false, 0x00); // ___123
 		vTaskDelay(100);
-		if (lcd->segment_max == 6) {
-			tm1637_set_number(lcd, -1234, true, 0x00); // -1234
+		tm1637_set_number(led, 1234, false, 0x00); // __1234
+		vTaskDelay(100);
+		if (led->segment_max == 6) {
+			tm1637_set_number(led, 12345, false, 0x00); // _12345
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, true, 0x00); // -12345
+			tm1637_set_number(led, 123456, false, 0x00); // 123456
 			vTaskDelay(100);
 		}
 
-		tm1637_set_number(lcd, -1, false, 0x00); // ____-1
+		tm1637_set_number(led, -1, true, 0x00); // -001
 		vTaskDelay(100);
-		tm1637_set_number(lcd, -12, false, 0x00); // ___-12
+		tm1637_set_number(led, -12, true, 0x00); // -012
 		vTaskDelay(100);
-		tm1637_set_number(lcd, -123, false, 0x00); // __-123
+		tm1637_set_number(led, -123, true, 0x00); // -123
 		vTaskDelay(100);
-		if (lcd->segment_max == 6) {
-			tm1637_set_number(lcd, -1234, false, 0x00); // _-1234
+		if (led->segment_max == 6) {
+			tm1637_set_number(led, -1234, true, 0x00); // -1234
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, false, 0x00); // -12345
+			tm1637_set_number(led, -12345, true, 0x00); // -12345
+			vTaskDelay(100);
+		}
+
+		tm1637_set_number(led, -1, false, 0x00); // ____-1
+		vTaskDelay(100);
+		tm1637_set_number(led, -12, false, 0x00); // ___-12
+		vTaskDelay(100);
+		tm1637_set_number(led, -123, false, 0x00); // __-123
+		vTaskDelay(100);
+		if (led->segment_max == 6) {
+			tm1637_set_number(led, -1234, false, 0x00); // _-1234
+			vTaskDelay(100);
+			tm1637_set_number(led, -12345, false, 0x00); // -12345
 			vTaskDelay(100);
 		}
 
@@ -127,95 +128,95 @@ void tm1637_task(void * arg)
 		uint16_t dot_position;
 		// Test display floating number
 		dot_position = 0x08;
-		if (lcd->segment_max == 6) dot_position = 0x20;
-		tm1637_set_number(lcd, 1, true, dot_position); // 0.001
+		if (led->segment_max == 6) dot_position = 0x20;
+		tm1637_set_number(led, 1, true, dot_position); // 0.001
 		vTaskDelay(100);
-		tm1637_set_number(lcd, 12, true, dot_position); // 0.012
+		tm1637_set_number(led, 12, true, dot_position); // 0.012
 		vTaskDelay(100);
-		tm1637_set_number(lcd, 123, true, dot_position); // 0.123
+		tm1637_set_number(led, 123, true, dot_position); // 0.123
 		vTaskDelay(100);
-		if (lcd->segment_max == 6) {
-			tm1637_set_number(lcd, 1234, true, dot_position); // 0.1234
+		if (led->segment_max == 6) {
+			tm1637_set_number(led, 1234, true, dot_position); // 0.1234
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 12345, true, dot_position); // 0.12345
+			tm1637_set_number(led, 12345, true, dot_position); // 0.12345
 			vTaskDelay(100);
 		}
 
-		if (lcd->segment_max == 4) {
-			tm1637_set_number(lcd, 1234, true, 0x08); // 1.234
+		if (led->segment_max == 4) {
+			tm1637_set_number(led, 1234, true, 0x08); // 1.234
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 1234, true, 0x04); // 12.34
+			tm1637_set_number(led, 1234, true, 0x04); // 12.34
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 1234, true, 0x02); // 123.4
+			tm1637_set_number(led, 1234, true, 0x02); // 123.4
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 1234, true, 0x00); // 1234
+			tm1637_set_number(led, 1234, true, 0x00); // 1234
 			vTaskDelay(100);
 		} else {
-			tm1637_set_number(lcd, 123456, true, 0x20); // 1.23456
+			tm1637_set_number(led, 123456, true, 0x20); // 1.23456
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, true, 0x10); // 12.3456
+			tm1637_set_number(led, 123456, true, 0x10); // 12.3456
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, true, 0x08); // 123.456
+			tm1637_set_number(led, 123456, true, 0x08); // 123.456
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, true, 0x04); // 1234.56
+			tm1637_set_number(led, 123456, true, 0x04); // 1234.56
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, true, 0x02); // 12345.6
+			tm1637_set_number(led, 123456, true, 0x02); // 12345.6
 			vTaskDelay(100);
-			tm1637_set_number(lcd, 123456, true, 0x00); // 123456
+			tm1637_set_number(led, 123456, true, 0x00); // 123456
 			vTaskDelay(100);
 
 		}
 
-		if (lcd->segment_max == 4) {
-			tm1637_set_number(lcd, -123, true, 0x08); // -.123
+		if (led->segment_max == 4) {
+			tm1637_set_number(led, -123, true, 0x08); // -.123
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -123, false, 0x04); // -1.23
+			tm1637_set_number(led, -123, false, 0x04); // -1.23
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -123, false, 0x02); // -12.3
+			tm1637_set_number(led, -123, false, 0x02); // -12.3
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -123, false, 0x00); // -123
+			tm1637_set_number(led, -123, false, 0x00); // -123
 			vTaskDelay(100);
 		} else {
-			tm1637_set_number(lcd, -12345, true, 0x20); // -.12345
+			tm1637_set_number(led, -12345, true, 0x20); // -.12345
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, true, 0x10); // -1.2345
+			tm1637_set_number(led, -12345, true, 0x10); // -1.2345
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, true, 0x08); // -12.345
+			tm1637_set_number(led, -12345, true, 0x08); // -12.345
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, false, 0x04); // -123.45
+			tm1637_set_number(led, -12345, false, 0x04); // -123.45
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, false, 0x02); // -1234.5
+			tm1637_set_number(led, -12345, false, 0x02); // -1234.5
 			vTaskDelay(100);
-			tm1637_set_number(lcd, -12345, false, 0x00); // -12345
+			tm1637_set_number(led, -12345, false, 0x00); // -12345
 			vTaskDelay(100);
 		}
 #endif
 
 		// Test display text
-		if (lcd->segment_max == 4) {
-			tm1637_set_segment_ascii(lcd, "PLAY");
+		if (led->segment_max == 4) {
+			tm1637_set_segment_ascii(led, "PLAY");
 		} else {
-			tm1637_set_segment_ascii(lcd, " PLAY ");
+			tm1637_set_segment_ascii(led, " PLAY ");
 		}
 		vTaskDelay(100);
-		tm1637_set_segment_ascii(lcd, "1234567890");
+		tm1637_set_segment_ascii(led, "1234567890");
 		vTaskDelay(100);
-		tm1637_set_segment_ascii(lcd, "IP 192.168.10.20");
+		tm1637_set_segment_ascii(led, "IP 192.168.10.20");
 		vTaskDelay(100);
-		if (lcd->segment_max == 4) {
-			tm1637_set_segment_ascii(lcd, "STOP");
+		if (led->segment_max == 4) {
+			tm1637_set_segment_ascii(led, "STOP");
 		} else {
-			tm1637_set_segment_ascii(lcd, " STOP ");
+			tm1637_set_segment_ascii(led, " STOP ");
 		}
 		vTaskDelay(100);
 
 #if CONFIG_TM1637_CLOCK_SEGMENT
-		tm1637_set_segment_ascii_with_time(lcd, "1234", 0x40, 1000);
+		tm1637_set_segment_ascii_with_time(led, "1234", 0x40, 1000);
 #else
-		if (lcd->segment_max == 4) {
-			tm1637_set_segment_ascii_with_time(lcd, "1234", 0x00, 1000);
+		if (led->segment_max == 4) {
+			tm1637_set_segment_ascii_with_time(led, "1234", 0x00, 1000);
 		} else {
-			tm1637_set_segment_ascii_with_time(lcd, "123456", 0x00, 1000);
+			tm1637_set_segment_ascii_with_time(led, "123456", 0x00, 1000);
 		}
 #endif
 		vTaskDelay(100);
