@@ -200,6 +200,7 @@ void tm1637_set_segment_ascii(tm1637_led_t * led, char * text)
 	}
 }
 
+// ets_delay_us causes WatchDog alert.
 void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const uint16_t dot_position, int time)
 {
 	char _text[5];
@@ -236,7 +237,8 @@ void tm1637_set_segment_ascii_with_time(tm1637_led_t * led, char * text, const u
 		vTaskDelay(pdMS_TO_TICKS(TM1637_AUTO_DELAY/1000));
 	}
 
-	ets_delay_us(time*1000);
+	//ets_delay_us(time*1000);
+	vTaskDelay(pdMS_TO_TICKS(time));
 	for (int i=(led->segment_max-1); i>=0; i--) {
 		int c = text[i];
 		uint8_t seg_data = ascii_symbols[c];
