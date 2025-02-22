@@ -107,7 +107,7 @@ tm1637_led_t * tm1637_init(gpio_num_t pin_clk, gpio_num_t pin_data) {
 		return NULL;
 	}
 
-	for (int i=0;i<sizeof(segment_idx);i++) {
+	for (int i = 0; i < (sizeof(segment_idx) / sizeof(segment_idx[0])); i++) {
 		led->segment_idx[i] = segment_idx[i];
 	}
 	led->segment_start = segment_start;
