@@ -16,9 +16,8 @@ I based it on [this](https://github.com/petrows/esp-32-tm1637).
 - Supported 6 segments module.   
 
 # Software requirements
-ESP-IDF V4.4/V5.x.   
-ESP-IDF V5.0 is required when using ESP32C2.   
-ESP-IDF V5.1 is required when using ESP32C6.   
+ESP-IDF V5.0 or later.   
+ESP-IDF V4.4 release branch reached EOL in July 2024.   
 
 # Hardware requiments
 TM1637 8 segment Digital Display Tube 4 digit LED module.   
