@@ -64,3 +64,30 @@ Select number of Segments
 (*1)   
 The TM1637's interface is similar to I2C, but it is not I2C.   
 You can change it to any pin using menuconfig.   
+
+# How to use this component in your project   
+Create idf_component.yml in the same directory as main.c.   
+```
+YourProject --+-- CMakeLists.txt
+              +-- main --+-- main.c
+                         +-- CMakeLists.txt
+                         +-- idf_component.yml
+```
+
+Contents of idf_component.yml.
+```
+dependencies:
+  nopnop2002/tm1637:
+    path: components/tm1637/
+    git: https://github.com/nopnop2002/esp-idf-tm1637.git
+```
+
+When you build a projects esp-idf will automaticly fetch repository to managed_components dir and link with your code.   
+```
+YourProject --+-- CMakeLists.txt
+              +-- main --+-- main.c
+              |          +-- CMakeLists.txt
+              |          +-- idf_component.yml
+              +-- managed_components ----- nopnop2002__tm1637
+```
+
