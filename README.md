@@ -52,7 +52,7 @@ Select Segment type
 Select number of Segments   
 ![config-app-3](https://github.com/nopnop2002/esp-idf-tm1637/assets/6020549/f67fc28f-4b7d-4431-a61a-f9f41b453800)
 
-# Wirering
+# Wiring
 
 |TM1637||ESP32|ESP32-S2/S3|ESP32-C2/C3/C6||
 |:-:|:-:|:-:|:-:|:-:|:-:|
